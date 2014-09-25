@@ -1,12 +1,12 @@
 package ca.etsmtl.gti710.models;
 
-public class Produit {
+public class Product {
 	
 	private int id;
 	private String name;
 	private String description;
 	
-	public Produit(int id) {
+	public Product(int id) {
 		this.id = id;
 	}
 	

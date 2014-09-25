@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import ca.etsmtl.gti710.models.Produit;
+import ca.etsmtl.gti710.models.Product;
 import ca.etsmtl.gti710.providers.IProvider;
 import ca.etsmtl.gti710.providers.StubProvider;
 
@@ -14,7 +14,7 @@ public class ProductsController {
 	IProvider provider = new StubProvider();
 	
 	@RequestMapping("/products")
-	public ArrayList<Produit> products() {
+	public ArrayList<Product> products() {
 		
 		return provider.getProducts();
 	}
