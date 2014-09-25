@@ -10,7 +10,7 @@ public class Product {
 		this.id = id;
 	}
 	
-	public String getDescription() {
+	public String getDescription(){
 		return description;
 	}
 

@@ -7,10 +7,8 @@ import ca.etsmtl.gti710.models.Product;
 public class StubProvider implements IProvider {
 	
 	private ArrayList<Product> produits = new ArrayList<Product>();
-
-	@Override
-	public ArrayList<Product> getProducts() {
-		
+	
+	public StubProvider() {
 		if (produits.size() == 0)
 		{
 			for (int i = 1 ; i <= 5 ; i++)
@@ -19,8 +17,11 @@ public class StubProvider implements IProvider {
 				p.setName("test");
 				produits.add(p);
 			}
-		}
-		
+		}		
+	}
+
+	@Override
+	public ArrayList<Product> getProducts() {
 		return produits;
 	}
 
