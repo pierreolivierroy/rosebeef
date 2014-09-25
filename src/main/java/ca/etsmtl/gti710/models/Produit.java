@@ -25,4 +25,8 @@ public class Produit {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	public int getId() {
+		return id;
+	}
 }
