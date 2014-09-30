@@ -16,7 +16,7 @@
         <property name="port" value="8069" />
         <property name="login" value="admin" />
         <property name="password" value="jaimeleschats" />
-        <property name="database" value="gti785_demo" />
+        <property name="database" value="gti710_demo" />
     </bean> 
 
 </beans>
