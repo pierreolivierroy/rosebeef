@@ -36,8 +36,8 @@ public class Connection {
 
         try {
             //Connect
-            params = new Object[] {database,login,password};
-            Integer id = (Integer)xmlrpcLogin.execute("login", params);
+            params = new Object[] {database, login, password};
+            Object id = xmlrpcLogin.execute("login", params);
             if (id instanceof Integer)
                 return (Integer)id;
             return -1;
