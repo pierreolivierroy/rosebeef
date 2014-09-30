@@ -1,6 +1,7 @@
 package ca.etsmtl.gti710.controllers;
 import java.util.ArrayList;
 
+import ca.etsmtl.gti710.openErp.Connection;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,7 +16,7 @@ public class ProductsController {
 	
 	@RequestMapping("/products")
 	public ArrayList<Produit> products() {
-		
+
 		return provider.getProducts();
 	}
 	
