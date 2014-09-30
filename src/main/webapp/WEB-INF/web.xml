@@ -5,6 +5,11 @@
 
 	<display-name>Hulk</display-name>
 
+	<context-param>
+	    <param-name>openerp-config-location</param-name>
+	    <param-value>/WEB-INF/OpenERP-context.xml</param-value>
+	</context-param>
+
     <servlet>
 		<servlet-name>mvc-dispatcher</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>

@@ -10,10 +10,13 @@
         http://www.springframework.org/schema/context/spring-context-4.0.xsd
         http://www.springframework.org/schema/mvc
         http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
-
- 	<context:component-scan base-package="ca.etsmtl.gti710"/>
- 	<mvc:annotation-driven />
  
- 	<bean id="jsonMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter" />
+    <bean id="connection" class="ca.etsmtl.gti710.openErp.Connection">
+        <property name="host" value="gti710-20143-07.logti.etsmtl.ca" />
+        <property name="port" value="8069" />
+        <property name="login" value="admin" />
+        <property name="password" value="jaimeleschats" />
+        <property name="database" value="gti785_demo" />
+    </bean> 
 
 </beans>

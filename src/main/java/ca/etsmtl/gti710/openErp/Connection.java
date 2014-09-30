@@ -11,20 +11,16 @@ import java.util.Vector;
 
 public class Connection {
 
-    private String host;
-    private int port;
-    private String login;
-    private String password;
-
-    public Connection(String host, int port, String login, String password) {
-
-        this.host = host;
-        this.port = port;
-        this.login = login;
-        this.password = password;
+    private String host = null;
+    private int port = 0;
+    private String login = null;
+    private String password = null;
+    private String database = null;
+    
+    public Connection() {
     }
 
-    public int connect (String database) {
+    public int connect () {
         Object[] params;
         XmlRpcClient xmlrpcLogin = new XmlRpcClient();
 
@@ -41,7 +37,7 @@ public class Connection {
         try {
             //Connect
             params = new Object[] {database,login,password};
-            Object id = xmlrpcLogin.execute("login", params);
+            Integer id = (Integer)xmlrpcLogin.execute("login", params);
             if (id instanceof Integer)
                 return (Integer)id;
             return -1;
@@ -53,6 +49,7 @@ public class Connection {
         catch (Exception e)
         {
             //logger.warn("Error while logging to OpenERP: ",e);
+        	System.out.println(e);
             return -3;
         }
     }
@@ -107,5 +104,8 @@ public class Connection {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+    public void setDatabase(String database) {
+        this.database = database;
     }
 }
