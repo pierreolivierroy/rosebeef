@@ -44,6 +44,7 @@ public class Connection {
         }
         catch (XmlRpcException e) {
             //logger.warn("XmlException Error while logging to OpenERP: ",e);
+        	System.out.println(e);
             return -2;
         }
         catch (Exception e)
