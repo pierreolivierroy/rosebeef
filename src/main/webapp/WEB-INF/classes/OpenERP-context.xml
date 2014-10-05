@@ -11,7 +11,7 @@
         http://www.springframework.org/schema/mvc
         http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
  
-    <bean id="connection" class="ca.etsmtl.gti710.openErp.Connection">
+    <bean id="client" class="ca.etsmtl.gti710.openErp.ClientAPI">
         <property name="host" value="gti710-20143-07.logti.etsmtl.ca" />
         <property name="port" value="8069" />
         <property name="login" value="admin" />
