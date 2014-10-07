@@ -71,9 +71,7 @@ public class ClientAPI {
         xmlrpcLogin.setConfig(xmlrpcConfigLogin);
 
         try {
-
-
-            Object read[]=new Object[product_id];
+            Object read[]=new Object[7];
             read[0]=database;   //Nom de la base de donnée
             read[1]=userId;   // ID de l'utilisateur
             read[2]=password;  //mot de passe
