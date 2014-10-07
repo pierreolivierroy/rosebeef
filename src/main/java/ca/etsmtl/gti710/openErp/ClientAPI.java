@@ -85,6 +85,7 @@ public class ClientAPI {
 
             @SuppressWarnings("unchecked")
 			HashMap<String, Object> result = (HashMap<String, Object>)xmlrpcLogin.execute("execute", read);
+            System.out.println(result);
             return result;
         }
         catch (XmlRpcException e) {

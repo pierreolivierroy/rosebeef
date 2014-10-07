@@ -28,5 +28,4 @@ public class ProductsController {
 			throw new ProductNotFoundException();
 		}
 	}
-	
 }
