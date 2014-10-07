@@ -56,4 +56,12 @@ public class OpenERPProvider implements IProvider {
 		return null;
 	}
 
+	@Override
+	public Order createOrder() {
+		
+		client.connect();
+		client.create();
+		
+		return null;
+	}
 }

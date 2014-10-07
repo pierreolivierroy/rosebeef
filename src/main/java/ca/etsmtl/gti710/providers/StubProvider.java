@@ -43,4 +43,10 @@ public class StubProvider implements IProvider {
 		return null;
 	}
 
+	@Override
+	public Order createOrder() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
