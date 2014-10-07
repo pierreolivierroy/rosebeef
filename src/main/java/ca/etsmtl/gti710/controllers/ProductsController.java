@@ -1,34 +1,32 @@
 package ca.etsmtl.gti710.controllers;
+
 import java.util.ArrayList;
-import java.util.HashMap;
-
+import ca.etsmtl.gti710.exceptions.ProductNotFoundException;
 import ca.etsmtl.gti710.models.Product;
-
-import ca.etsmtl.gti710.openErp.ClientAPI;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import ca.etsmtl.gti710.providers.IProvider;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import ca.etsmtl.gti710.openErp.Connection;
-import ca.etsmtl.gti710.providers.IProvider;
-import ca.etsmtl.gti710.providers.StubProvider;
-
 @RestController
 public class ProductsController {
-	
-	IProvider provider = new StubProvider();
-	ApplicationContext context = new ClassPathXmlApplicationContext("classpath:OpenERP-context.xml");
-	
+
+	@Autowired
+	IProvider provider;
+
 	@RequestMapping("/products")
-	public ArrayList<Product> products() {
-		
-		ClientAPI client = (ClientAPI) context.getBean("client");
-        client.connect();
-        HashMap<Integer, Object> result = client.read();
-        System.out.println(result);
-		
+	public ArrayList<Product> products() {		
 		return provider.getProducts();
+	}
+
+	@RequestMapping("/products/{product_id}")
+	public Product product(@PathVariable("product_id") int product_id) {
+		try {
+			return provider.getProduct(product_id);
+		} catch (NullPointerException e) {
+			throw new ProductNotFoundException();
+		}
 	}
 	
 }

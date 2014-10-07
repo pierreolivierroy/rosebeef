@@ -16,7 +16,7 @@ public class Connection {
     private String login = null;
     private String password = null;
     private String database = null;
-    
+
     public Connection() {
     }
 

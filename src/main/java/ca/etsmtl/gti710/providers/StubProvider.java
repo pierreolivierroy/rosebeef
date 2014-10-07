@@ -27,7 +27,7 @@ public class StubProvider implements IProvider {
 
 	@Override
 	public Product getProduct(int id) {
-		return produits.get(id);
+		return null;
 	}
 
 }

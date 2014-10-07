@@ -8,7 +8,6 @@ import org.apache.xmlrpc.XmlRpcException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
-import java.util.Vector;
 
 public class ClientAPI {
 
@@ -57,7 +56,7 @@ public class ClientAPI {
         }
     }
 
-    public HashMap<Integer, Object> read() {
+    public HashMap<String, Object> readProduct(int product_id) {
 
         XmlRpcClient xmlrpcLogin = new XmlRpcClient();
 
@@ -74,7 +73,7 @@ public class ClientAPI {
         try {
 
 
-            Object read[]=new Object[7];
+            Object read[]=new Object[product_id];
             read[0]=database;   //Nom de la base de donnée
             read[1]=userId;   // ID de l'utilisateur
             read[2]=password;  //mot de passe
@@ -82,10 +81,11 @@ public class ClientAPI {
             //TODO Put those elements in the method parameters
             read[3]="product.product";
             read[4]="read";
-            read[5] = 7;
+            read[5] = product_id;
             read[6] = null;
 
-            HashMap<Integer, Object> result = (HashMap<Integer, Object>)xmlrpcLogin.execute("execute", read);
+            @SuppressWarnings("unchecked")
+			HashMap<String, Object> result = (HashMap<String, Object>)xmlrpcLogin.execute("execute", read);
             return result;
         }
         catch (XmlRpcException e) {
