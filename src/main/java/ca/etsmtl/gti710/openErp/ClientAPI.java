@@ -80,7 +80,8 @@ public class ClientAPI {
             read[3]="product.product";
             read[4]="read";
             read[5] = product_id;
-            read[6] = null;
+            read[6]=null;
+
 
             @SuppressWarnings("unchecked")
 			HashMap<String, Object> result = (HashMap<String, Object>)xmlrpcLogin.execute("execute", read);
@@ -97,6 +98,50 @@ public class ClientAPI {
         }
 
         return null;
+    }
+
+    public void create() {
+
+        XmlRpcClient xmlrpcLogin = new XmlRpcClient();
+
+        XmlRpcClientConfigImpl xmlrpcConfigLogin = new XmlRpcClientConfigImpl();
+        xmlrpcConfigLogin.setEnabledForExtensions(true);
+        try {
+            xmlrpcConfigLogin.setServerURL(new URL("http", host, port, "/xmlrpc/object"));
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        xmlrpcLogin.setConfig(xmlrpcConfigLogin);
+
+        try {
+            Object read[]=new Object[7];
+            read[0]=database;   //Nom de la base de donnée
+            read[1]=userId;   // ID de l'utilisateur
+            read[2]=password;  //mot de passe
+
+            //TODO Put those elements in the method parameters
+            read[3]="res.partner";
+            read[4]="create";
+            HashMap<String, Object> partner = new HashMap<String, Object>();
+            partner.put("name", "Test nom");
+            partner.put("lang", "fr_FR");
+            read[5] = partner;
+
+
+            Object clientID = xmlrpcLogin.execute("execute", read);
+            System.out.println(clientID);
+        }
+        catch (XmlRpcException e) {
+            //logger.warn("XmlException Error while logging to OpenERP: ",e);
+            System.out.println(e);
+        }
+        catch (Exception e)
+        {
+            //logger.warn("Error while logging to OpenERP: ",e);
+            System.out.println(e);
+        }
+
     }
 
     public void setHost(String host) {
