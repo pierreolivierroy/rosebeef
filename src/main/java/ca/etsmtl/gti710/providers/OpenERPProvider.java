@@ -16,17 +16,19 @@ public class OpenERPProvider implements IProvider {
 
 	@Override
 	public Product getProduct(int id) {
-	    
+
 		client.connect();
-	    
+ 
 	    HashMap<String, Object> openERPProduct = client.readProduct(id);
 
 	    Product p = new Product(id);
-	    
 	    p.setName(openERPProduct.get("name").toString());
 	    p.setQuantity((Double)openERPProduct.get("qty_available"));
+	    p.setDescription(openERPProduct.get("description").toString());
 	    p.setPrice((Double)openERPProduct.get("lst_price"));
+
 	    boolean code = Boolean.parseBoolean(openERPProduct.get("default_code").toString());
+
 	    if (!code) {
 	    	p.setCode(openERPProduct.get("default_code").toString());
 	    }
