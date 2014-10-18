@@ -101,7 +101,29 @@ public class ClientAPI {
         return null;
     }
 
-    public void create() {
+    public void createClient(String firstname, String lastname, String address, String city, String postalcode, String phone, String province, String country) {
+
+        HashMap<String, Object> partnerInfo = new HashMap<String, Object>();
+        partnerInfo.put("name", firstname + " " + lastname);
+        partnerInfo.put("lang", "fr_FR");
+        partnerInfo.put("street", address);
+        partnerInfo.put("zip", postalcode);
+        partnerInfo.put("city", city);
+        partnerInfo.put("phone", phone);
+
+        create("res.partner", partnerInfo);
+
+    }
+
+    //TODO find the country_id
+    private int findCountry_id (String countryName) {
+
+        return 0;
+    }
+
+    private void create(String table, HashMap<String, Object> info) {
+
+        System.out.println("************************* ASKDJASKJDHKJASHD");
 
         XmlRpcClient xmlrpcLogin = new XmlRpcClient();
 
@@ -117,28 +139,23 @@ public class ClientAPI {
 
         try {
             Object read[]=new Object[7];
-            read[0]=database;   //Nom de la base de donnée
-            read[1]=userId;   // ID de l'utilisateur
-            read[2]=password;  //mot de passe
-
-            //TODO Put those elements in the method parameters
-            read[3]="res.partner";
-            read[4]="create";
-            HashMap<String, Object> partner = new HashMap<String, Object>();
-            partner.put("name", "Test nom");
-            partner.put("lang", "fr_FR");
-            read[5] = partner;
-
+            read[0] = database;
+            read[1] = userId;
+            read[2] = password;
+            read[3] = table;
+            read[4] = "create";
+            read[5] = info;
 
             Object clientID = xmlrpcLogin.execute("execute", read);
             System.out.println(clientID);
         }
         catch (XmlRpcException e) {
+
             //logger.warn("XmlException Error while logging to OpenERP: ",e);
             System.out.println(e);
         }
-        catch (Exception e)
-        {
+        catch (Exception e){
+
             //logger.warn("Error while logging to OpenERP: ",e);
             System.out.println(e);
         }

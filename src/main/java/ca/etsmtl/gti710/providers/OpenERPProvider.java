@@ -19,7 +19,8 @@ public class OpenERPProvider implements IProvider {
 	public Product getProduct(int id) {
 
 		client.connect();
- 
+        System.out.println("ALLO ******************** ASDBAKJDHAD");
+        client.createClient("Olivier", "Rivard", "92 chénier app. 201", "St-Philippe", "J0L 2K0", "514 608-6253", "", "");
 	    HashMap<String, Object> openERPProduct = client.readProduct(id);
 
 	    Product p = new Product(id);
