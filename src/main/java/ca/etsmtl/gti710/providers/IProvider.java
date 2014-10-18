@@ -12,5 +12,6 @@ public interface IProvider {
 
 	public ArrayList<Order> getOrders();
 	public Order getOrder(int id);
+	public Order createOrder();
 	
 }
