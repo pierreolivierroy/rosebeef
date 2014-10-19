@@ -15,12 +15,13 @@ public class OpenERPProvider implements IProvider {
 	ApplicationContext context = new ClassPathXmlApplicationContext("classpath:OpenERP-context.xml");
 	ClientAPI client = (ClientAPI) context.getBean("client");
 
+    public OpenERPProvider() {
+        client.connect();
+    }
+
 	@Override
 	public Product getProduct(int id) {
 
-		client.connect();
-        System.out.println("ALLO ******************** ASDBAKJDHAD");
-        client.createClient("Olivier", "Rivard", "92 chénier app. 201", "St-Philippe", "J0L 2K0", "514 608-6253", "", "");
 	    HashMap<String, Object> openERPProduct = client.readProduct(id);
 
 	    Product p = new Product(id);
@@ -41,7 +42,7 @@ public class OpenERPProvider implements IProvider {
 
 	@Override
 	public ArrayList<Product> getProducts() {
-		// TODO Auto-generated method stub
+        client.search();
 		return null;
 	}
 
@@ -59,10 +60,6 @@ public class OpenERPProvider implements IProvider {
 
 	@Override
 	public Order createOrder() {
-		
-		client.connect();
-		client.create();
-		
 		return null;
 	}
 }
