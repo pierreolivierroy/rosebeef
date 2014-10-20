@@ -76,6 +76,17 @@ public class ClientAPI {
 
     }
 
+    public Object[] getProductList() {
+
+        Object searchParam[] = new Object[3];
+        searchParam[0] = "name";
+        searchParam[1] = "like";
+        searchParam[2] = "";
+        Vector<Object> param = new Vector<Object>();
+        param.add(searchParam);
+        return search("product.product", param);
+    }
+
     public HashMap<String, Object> getCountryList() {
 
         return null;
@@ -83,17 +94,7 @@ public class ClientAPI {
 
     private void create(String table, HashMap<String, Object> info) {
 
-        XmlRpcClient xmlrpcLogin = new XmlRpcClient();
-
-        XmlRpcClientConfigImpl xmlrpcConfigLogin = new XmlRpcClientConfigImpl();
-        xmlrpcConfigLogin.setEnabledForExtensions(true);
-        try {
-            xmlrpcConfigLogin.setServerURL(new URL("http", host, port, "/xmlrpc/object"));
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-
-        xmlrpcLogin.setConfig(xmlrpcConfigLogin);
+        XmlRpcClient xmlrpcLogin = getXmlrpcLogin();
 
         try {
             Object read[]=new Object[7];
@@ -105,7 +106,6 @@ public class ClientAPI {
             read[5] = info;
 
             Object clientID = xmlrpcLogin.execute("execute", read);
-            System.out.println(clientID);
         }
         catch (XmlRpcException e) {
 
@@ -120,44 +120,21 @@ public class ClientAPI {
 
     }
 
-    public void search() {
+    private Object[] search(String table, Vector<Object> param) {
 
-        XmlRpcClient xmlrpcLogin = new XmlRpcClient();
-
-        XmlRpcClientConfigImpl xmlrpcConfigLogin = new XmlRpcClientConfigImpl();
-        xmlrpcConfigLogin.setEnabledForExtensions(true);
-        try {
-            xmlrpcConfigLogin.setServerURL(new URL("http", host, port, "/xmlrpc/object"));
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-
-        xmlrpcLogin.setConfig(xmlrpcConfigLogin);
+        XmlRpcClient xmlrpcLogin = getXmlrpcLogin();
 
         try {
             Object search[] = new Object[6];
             search[0] = database;
             search[1] = userId;
             search[2] = password;
-            search[3] = "product.product";
+            search[3] = table;
             search[4] = "search";
-
-            Object searchParam[] = new Object[3];
-            searchParam[0] = "name";
-            searchParam[1] = "like";
-            searchParam[2] = "Processor";
-
-            Vector<Object> param = new Vector<Object>();
-            param.add(searchParam);
-
             search[5] = param;
 
             Object[] ids = (Object[])xmlrpcLogin.execute("execute", search);
-            for (Object id : ids) {
-                System.out.println(id);
-            }
-
-
+            return ids;
         }
         catch (XmlRpcException e) {
             //logger.warn("XmlException Error while logging to OpenERP: ",e);
@@ -168,22 +145,12 @@ public class ClientAPI {
             //logger.warn("Error while logging to OpenERP: ",e);
             System.out.println(e);
         }
-
+        return null;
     }
 
     private HashMap<String, Object> read(String table, int id) {
 
-        XmlRpcClient xmlrpcLogin = new XmlRpcClient();
-
-        XmlRpcClientConfigImpl xmlrpcConfigLogin = new XmlRpcClientConfigImpl();
-        xmlrpcConfigLogin.setEnabledForExtensions(true);
-        try {
-            xmlrpcConfigLogin.setServerURL(new URL("http", host, port, "/xmlrpc/object"));
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-
-        xmlrpcLogin.setConfig(xmlrpcConfigLogin);
+        XmlRpcClient xmlrpcLogin = getXmlrpcLogin();
 
         try {
             Object read[]=new Object[7];
@@ -196,7 +163,6 @@ public class ClientAPI {
             read[6] = null;
 
             HashMap<String, Object> result = (HashMap<String, Object>)xmlrpcLogin.execute("execute", read);
-            System.out.println(result);
             return result;
         }
         catch (XmlRpcException e) {
@@ -210,6 +176,22 @@ public class ClientAPI {
         }
 
         return null;
+    }
+
+    private XmlRpcClient getXmlrpcLogin() {
+
+        XmlRpcClient xmlrpcLogin = new XmlRpcClient();
+
+        XmlRpcClientConfigImpl xmlrpcConfigLogin = new XmlRpcClientConfigImpl();
+        xmlrpcConfigLogin.setEnabledForExtensions(true);
+        try {
+            xmlrpcConfigLogin.setServerURL(new URL("http", host, port, "/xmlrpc/object"));
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        xmlrpcLogin.setConfig(xmlrpcConfigLogin);
+        return xmlrpcLogin;
     }
 
     public void setHost(String host) {

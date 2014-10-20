@@ -42,8 +42,13 @@ public class OpenERPProvider implements IProvider {
 
 	@Override
 	public ArrayList<Product> getProducts() {
-        client.search();
-		return null;
+        Object[] idProducts = client.getProductList();
+        ArrayList<Product> listProduits = new ArrayList<Product>();
+        for (Object id : idProducts) {
+
+            listProduits.add(getProduct((Integer)id));
+        }
+		return listProduits;
 	}
 
 	@Override
