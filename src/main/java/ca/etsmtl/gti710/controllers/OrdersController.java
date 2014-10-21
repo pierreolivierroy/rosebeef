@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
 import ca.etsmtl.gti710.exceptions.OrderNotFoundException;
 import ca.etsmtl.gti710.models.Order;
 import ca.etsmtl.gti710.providers.IProvider;
