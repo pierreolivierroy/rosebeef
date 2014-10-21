@@ -55,8 +55,13 @@ public class OpenERPProvider implements IProvider {
 
 	@Override
 	public ArrayList<Order> getOrders() {
-		// TODO Auto-generated method stub
-		return null;
+        Object[] idOrders = client.getOrderList();
+        ArrayList<Order> listOrders = new ArrayList<Order>();
+        for (Object id : idOrders) {
+
+            listOrders.add(getOrder((Integer)id));
+        }
+        return listOrders;
 	}
 
 	@Override

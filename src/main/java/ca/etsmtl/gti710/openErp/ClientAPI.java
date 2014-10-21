@@ -98,6 +98,17 @@ public class ClientAPI {
         return search("product.product", param);
     }
 
+    public Object[] getOrderList() {
+
+        Object searchParam[] = new Object[3];
+        searchParam[0] = "name";
+        searchParam[1] = "like";
+        searchParam[2] = "";
+        Vector<Object> param = new Vector<Object>();
+        param.add(searchParam);
+        return search("sale.order", param);
+    }
+
     public HashMap<String, Object> getCountryList() {
 
         return null;
