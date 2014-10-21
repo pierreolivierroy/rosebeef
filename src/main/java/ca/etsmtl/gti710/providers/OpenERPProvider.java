@@ -1,8 +1,10 @@
 package ca.etsmtl.gti710.providers;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
+import ca.etsmtl.gti710.models.SaleOrderLine;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -24,20 +26,20 @@ public class OpenERPProvider implements IProvider {
 
 	    HashMap<String, Object> openERPProduct = client.readProduct(id);
 
-	    Product p = new Product(id);
-	    p.setName(openERPProduct.get("name").toString());
-	    p.setQuantity((Double)openERPProduct.get("qty_available"));
-	    p.setPrice((Double)openERPProduct.get("lst_price"));
+	    Product product = new Product(id);
+	    product.setName(openERPProduct.get("name").toString());
+	    product.setQuantity((Double) openERPProduct.get("qty_available"));
+	    product.setPrice((Double) openERPProduct.get("lst_price"));
 
 	    if (!openERPProduct.get("description").toString().equals("false")) {
-	    	p.setDescription(openERPProduct.get("description").toString());
+	    	product.setDescription(openERPProduct.get("description").toString());
 	    }
 
 	    if (!openERPProduct.get("default_code").toString().equals("false")) {
-	    	p.setCode(openERPProduct.get("default_code").toString());
+	    	product.setCode(openERPProduct.get("default_code").toString());
 	    }
 
-	    return p;
+	    return product;
 	}
 
 	@Override
@@ -59,8 +61,31 @@ public class OpenERPProvider implements IProvider {
 
 	@Override
 	public Order getOrder(int id) {
-		// TODO Auto-generated method stub
-		return null;
+		HashMap<String, Object> orderInfo = client.readOrder(id);
+        Order order = new Order();
+        order.setOrder_id((Integer)orderInfo.get("id"));
+        order.setOrder_date(orderInfo.get("date_order").toString());
+        order.setAmount_no_taxes((Double) orderInfo.get("amount_untaxed"));
+        order.setAmount_taxes((Double) orderInfo.get("amount_tax"));
+        order.setAmount_total((Double)orderInfo.get("amount_total"));
+        order.setState((String)orderInfo.get("state"));
+
+        Object[] lineOrderIds = (Object[]) orderInfo.get("order_line");
+        ArrayList<SaleOrderLine> saleOrderLines = new ArrayList<SaleOrderLine>();
+
+        for (Object lineOrderId : lineOrderIds) {
+
+            HashMap<String, Object> lineOrderInfo = client.readLineOrder((Integer)lineOrderId);
+            SaleOrderLine saleOrderLine = new SaleOrderLine();
+            saleOrderLine.setName(lineOrderInfo.get("name").toString());
+            saleOrderLine.setQuantity((Double)lineOrderInfo.get("product_uom_qty"));
+            saleOrderLine.setPrice((Double)lineOrderInfo.get("price_unit"));
+            saleOrderLine.setSubtotal((Double)lineOrderInfo.get("price_subtotal"));
+            saleOrderLines.add(saleOrderLine);
+        }
+
+        order.setSaleOrderLines(saleOrderLines);
+		return order;
 	}
 
 	@Override

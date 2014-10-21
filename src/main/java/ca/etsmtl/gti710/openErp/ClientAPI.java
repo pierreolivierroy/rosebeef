@@ -7,6 +7,7 @@ import org.apache.xmlrpc.XmlRpcException;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Vector;
 
@@ -60,6 +61,16 @@ public class ClientAPI {
     public HashMap<String, Object> readProduct(int product_id) {
 
         return read("product.product", product_id);
+    }
+
+    public HashMap<String, Object> readOrder(int order_id) {
+
+        return read("sale.order", order_id);
+    }
+
+    public HashMap<String, Object> readLineOrder(Integer lineOrderId) {
+
+        return read("sale.order.line", lineOrderId);
     }
 
     public void createClient(String firstname, String lastname, String address, String city, String postalcode, String phone, String province_id, String country_id) {
