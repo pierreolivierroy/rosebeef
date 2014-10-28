@@ -2,6 +2,7 @@ package ca.etsmtl.gti710.providers;
 
 import java.util.ArrayList;
 
+import ca.etsmtl.gti710.models.Country;
 import ca.etsmtl.gti710.models.Order;
 import ca.etsmtl.gti710.models.Product;
 
@@ -43,10 +44,25 @@ public class StubProvider implements IProvider {
 		return null;
 	}
 
-	@Override
+    @Override
+    public Order createOrder(int customerId) {
+        return null;
+    }
+
+    @Override
 	public Order createOrder() {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+    @Override
+    public Country getCountry(int id) {
+        return null;
+    }
+
+    @Override
+    public ArrayList<Country> getCountries() {
+        return null;
+    }
 
 }

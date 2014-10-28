@@ -1,7 +1,6 @@
 package ca.etsmtl.gti710.models;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 public class Order {
 	

@@ -7,7 +7,6 @@ import org.apache.xmlrpc.XmlRpcException;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Vector;
 
@@ -60,31 +59,61 @@ public class ClientAPI {
 
     public HashMap<String, Object> readProduct(int product_id) {
 
-        return read("product.product", product_id);
+        Object[] fields = new Object[6];
+        fields[0] = "id";
+        fields[1] = "name";
+        fields[2] = "description";
+        fields[3] = "default_code";
+        fields[4] = "qty_available";
+        fields[5] = "lst_price";
+
+
+        return read("product.product", product_id, fields);
     }
 
     public HashMap<String, Object> readOrder(int order_id) {
 
-        return read("sale.order", order_id);
+        return read("sale.order", order_id, null);
     }
 
     public HashMap<String, Object> readLineOrder(Integer lineOrderId) {
 
-        return read("sale.order.line", lineOrderId);
+        return read("sale.order.line", lineOrderId, null);
     }
 
-    public void createClient(String firstname, String lastname, String address, String city, String postalcode, String phone, String province_id, String country_id) {
+    public int createOrder(int customerId){
+
+        return 0;
+    }
+
+    public HashMap<String,Object> readCountry(int id) {
+
+        return read("res.country", id, null);
+    }
+
+
+    public void createCustomer(String firstname, String lastname, String address, String city, String postalcode, String phone, String mobilePhone, String email, String province_id, String country_id) {
 
         HashMap<String, Object> partnerInfo = new HashMap<String, Object>();
         partnerInfo.put("name", firstname + " " + lastname);
         partnerInfo.put("lang", "fr_FR");
-        partnerInfo.put("street", address);
-        partnerInfo.put("zip", postalcode);
-        partnerInfo.put("city", city);
-        partnerInfo.put("phone", phone);
+        partnerInfo.put("customer", true);
 
-        create("res.partner", partnerInfo);
+        Object id = create("res.partner", partnerInfo);
 
+        HashMap<String, Object> addressInfo = new HashMap<String, Object>();
+        partnerInfo.put("name", firstname + " " + lastname);
+        addressInfo.put("partner_id", id);
+        addressInfo.put("street", address);
+        addressInfo.put("zip", postalcode);
+        addressInfo.put("city", city);
+        addressInfo.put("phone", phone);
+        addressInfo.put("mobile", mobilePhone);
+        addressInfo.put("email", email);
+        addressInfo.put("country_id", country_id);
+        addressInfo.put("state_id", province_id);
+
+        create("res.partner.address", addressInfo);
     }
 
     public Object[] getProductList() {
@@ -109,25 +138,32 @@ public class ClientAPI {
         return search("sale.order", param);
     }
 
-    public HashMap<String, Object> getCountryList() {
+    public Object[] getCountryList() {
 
-        return null;
+        Object searchParam[] = new Object[3];
+        searchParam[0] = "name";
+        searchParam[1] = "like";
+        searchParam[2] = "";
+        Vector<Object> param = new Vector<Object>();
+        param.add(searchParam);
+        return search("res.country", param);
     }
 
-    private void create(String table, HashMap<String, Object> info) {
+    private Object create(String table, HashMap<String, Object> info) {
 
         XmlRpcClient xmlrpcLogin = getXmlrpcLogin();
 
         try {
-            Object read[]=new Object[7];
-            read[0] = database;
-            read[1] = userId;
-            read[2] = password;
-            read[3] = table;
-            read[4] = "create";
-            read[5] = info;
+            Object create[]=new Object[7];
+            create[0] = database;
+            create[1] = userId;
+            create[2] = password;
+            create[3] = table;
+            create[4] = "create";
+            create[5] = info;
 
-            Object clientID = xmlrpcLogin.execute("execute", read);
+            Object id = xmlrpcLogin.execute("execute", create);
+            return id;
         }
         catch (XmlRpcException e) {
 
@@ -139,6 +175,7 @@ public class ClientAPI {
             //logger.warn("Error while logging to OpenERP: ",e);
             System.out.println(e);
         }
+        return null;
 
     }
 
@@ -170,7 +207,7 @@ public class ClientAPI {
         return null;
     }
 
-    private HashMap<String, Object> read(String table, int id) {
+    private HashMap<String, Object> read(String table, int id, Object[] fields) {
 
         XmlRpcClient xmlrpcLogin = getXmlrpcLogin();
 
@@ -182,7 +219,7 @@ public class ClientAPI {
             read[3] = table;
             read[4] = "read";
             read[5] = id;
-            read[6] = null;
+            read[6] = fields;
 
             HashMap<String, Object> result = (HashMap<String, Object>)xmlrpcLogin.execute("execute", read);
             return result;
@@ -234,4 +271,5 @@ public class ClientAPI {
     public void setDatabase(String database) {
         this.database = database;
     }
+
 }

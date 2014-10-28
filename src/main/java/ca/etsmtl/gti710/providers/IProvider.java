@@ -2,6 +2,7 @@ package ca.etsmtl.gti710.providers;
 
 import java.util.ArrayList;
 
+import ca.etsmtl.gti710.models.Country;
 import ca.etsmtl.gti710.models.Order;
 import ca.etsmtl.gti710.models.Product;
 
@@ -12,6 +13,11 @@ public interface IProvider {
 
 	public ArrayList<Order> getOrders();
 	public Order getOrder(int id);
-	public Order createOrder();
+    public Order createOrder(int customerId);
+
+    Order createOrder();
+
+    public Country getCountry(int id);
+    public ArrayList<Country> getCountries();
 	
 }

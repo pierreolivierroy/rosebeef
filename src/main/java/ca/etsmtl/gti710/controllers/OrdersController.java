@@ -23,7 +23,7 @@ public class OrdersController {
 	}
 
 	@RequestMapping(value="/orders", method=RequestMethod.POST)
-	public Order createOrders() {		
+	public Order createOrders() {
 		return provider.createOrder();
 	}
 	

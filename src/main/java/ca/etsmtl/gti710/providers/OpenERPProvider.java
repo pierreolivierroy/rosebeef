@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
+import ca.etsmtl.gti710.models.Country;
 import ca.etsmtl.gti710.models.SaleOrderLine;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -93,8 +94,38 @@ public class OpenERPProvider implements IProvider {
 		return order;
 	}
 
-	@Override
-	public Order createOrder() {
-		return null;
-	}
+    @Override
+    public Order createOrder(int customerId) {
+
+        return null;
+    }
+
+    @Override
+    public Order createOrder() {
+        return null;
+    }
+
+    @Override
+    public Country getCountry(int id) {
+
+        HashMap<String, Object> openERPCountry = client.readCountry(id);
+
+        Country country = new Country(id);
+        country.setName(openERPCountry.get("name").toString());
+        country.setCode(openERPCountry.get("code").toString());
+
+        return country;
+    }
+
+    @Override
+    public ArrayList<Country> getCountries() {
+        Object[] idCountries = client.getCountryList();
+        ArrayList<Country> listCountries = new ArrayList<Country>();
+        for (Object id : idCountries) {
+
+            listCountries.add(getCountry((Integer) id));
+        }
+        return listCountries;
+    }
+
 }
