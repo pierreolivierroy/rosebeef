@@ -1,7 +1,6 @@
 package ca.etsmtl.gti710.providers;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 
 import ca.etsmtl.gti710.models.Country;
@@ -29,7 +28,6 @@ public class OpenERPProvider implements IProvider {
 
 	    Product product = new Product(id);
 	    product.setName(openERPProduct.get("name").toString());
-	    product.setQuantity((Double) openERPProduct.get("qty_available"));
 	    product.setPrice((Double) openERPProduct.get("lst_price"));
 
 	    if (!openERPProduct.get("description").toString().equals("false")) {
@@ -40,11 +38,36 @@ public class OpenERPProvider implements IProvider {
 	    	product.setCode(openERPProduct.get("default_code").toString());
 	    }
 
+        if (!openERPProduct.get("x_os").toString().equals("false")) {
+            product.setOs(openERPProduct.get("x_os").toString());
+        }
+
+        if (!openERPProduct.get("x_camera").toString().equals("false")) {
+            product.setCamera(openERPProduct.get("x_camera").toString());
+        }
+
+        if (!openERPProduct.get("x_display").toString().equals("false")) {
+            product.getDisplay(openERPProduct.get("x_display").toString());
+        }
+
+        if (!openERPProduct.get("weight").toString().equals("false")) {
+            product.setWeight(openERPProduct.get("weight").toString());
+        }
+
+        ArrayList imagesList = new ArrayList();
+        for (int i = 1; i <= 5;i++) {
+            if (!openERPProduct.get("x_image"+i).toString().equals("false") && !openERPProduct.get("x_image"+i).toString().equals("")) {
+                imagesList.add(openERPProduct.get("x_image"+i).toString());
+            }
+        }
+        product.setImages(imagesList);
+
 	    return product;
 	}
 
 	@Override
 	public ArrayList<Product> getProducts() {
+
         Object[] idProducts = client.getProductList();
         ArrayList<Product> listProduits = new ArrayList<Product>();
         for (Object id : idProducts) {
@@ -54,20 +77,10 @@ public class OpenERPProvider implements IProvider {
 		return listProduits;
 	}
 
-	@Override
-	public ArrayList<Order> getOrders() {
-        Object[] idOrders = client.getOrderList();
-        ArrayList<Order> listOrders = new ArrayList<Order>();
-        for (Object id : idOrders) {
+    @Override
+    public Order getOrder(int id) {
 
-            listOrders.add(getOrder((Integer)id));
-        }
-        return listOrders;
-	}
-
-	@Override
-	public Order getOrder(int id) {
-		HashMap<String, Object> orderInfo = client.readOrder(id);
+        HashMap<String, Object> orderInfo = client.readOrder(id);
         Order order = new Order();
         order.setOrder_id((Integer)orderInfo.get("id"));
         order.setOrder_date(orderInfo.get("date_order").toString());
@@ -77,6 +90,18 @@ public class OpenERPProvider implements IProvider {
         order.setAmount_total((Double)orderInfo.get("amount_total"));
         order.setState((String)orderInfo.get("state"));
 
+        if (!orderInfo.get("amount_untaxed").toString().equals("false")) {
+            order.setAmount_no_taxes((Double) orderInfo.get("amount_untaxed"));
+        }
+        if (!orderInfo.get("amount_tax").toString().equals("false")) {
+            order.setAmount_taxes((Double) orderInfo.get("amount_tax"));
+        }
+        if (!orderInfo.get("amount_total").toString().equals("false")) {
+            order.setAmount_total((Double)orderInfo.get("amount_total"));
+        }
+        if (!orderInfo.get("state").toString().equals("false")) {
+            order.setState(orderInfo.get("state").toString());
+        }
         Object[] lineOrderIds = (Object[]) orderInfo.get("order_line");
         ArrayList<SaleOrderLine> saleOrderLines = new ArrayList<SaleOrderLine>();
 
@@ -92,19 +117,34 @@ public class OpenERPProvider implements IProvider {
         }
 
         order.setSaleOrderLines(saleOrderLines);
-		return order;
+        return order;
+    }
+
+	@Override
+	public ArrayList<Order> getOrders() {
+
+        Object[] idOrders = client.getOrderList();
+        ArrayList<Order> listOrders = new ArrayList<Order>();
+        for (Object id : idOrders) {
+
+            listOrders.add(getOrder((Integer)id));
+        }
+        return listOrders;
 	}
 
     @Override
     public Order createOrder(int customerId) {
 
-        return null;
+        int orderId = client.createOrder("name", customerId);
+        return getOrder(orderId);
     }
 
     @Override
-    public Order createOrder() {
-        return null;
+    public Order addLineOrder(int orderId, int productId, int quantity) {
+        client.createLineOrder(orderId, quantity , productId);
+        return getOrder(orderId);
     }
+
 
     @Override
     public Country getCountry(int id) {

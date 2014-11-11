@@ -7,6 +7,7 @@ import org.apache.xmlrpc.XmlRpcException;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Vector;
 
@@ -39,7 +40,7 @@ public class ClientAPI {
         xmlrpcLogin.setConfig(xmlrpcConfigLogin);
 
         try {
-            //Connect
+
             params = new Object[] {database, login, password};
             Object id = xmlrpcLogin.execute("login", params);
             if (id instanceof Integer) {
@@ -47,26 +48,33 @@ public class ClientAPI {
             }
         }
         catch (XmlRpcException e) {
-            //logger.warn("XmlException Error while logging to OpenERP: ",e);
+
             System.out.println(e);
         }
         catch (Exception e)
         {
-            //logger.warn("Error while logging to OpenERP: ",e);
+
             System.out.println(e);
         }
     }
 
     public HashMap<String, Object> readProduct(int product_id) {
 
-        Object[] fields = new Object[6];
+        Object[] fields = new Object[15];
         fields[0] = "id";
         fields[1] = "name";
         fields[2] = "description";
         fields[3] = "default_code";
-        fields[4] = "qty_available";
         fields[5] = "lst_price";
-
+        fields[6] = "x_image1";
+        fields[7] = "x_image2";
+        fields[8] = "x_image3";
+        fields[9] = "x_image4";
+        fields[10] = "x_image5";
+        fields[11] = "x_os";
+        fields[12] = "x_camera";
+        fields[13] = "x_display";
+        fields[14] = "weight";
 
         return read("product.product", product_id, fields);
     }
@@ -81,9 +89,45 @@ public class ClientAPI {
         return read("sale.order.line", lineOrderId, null);
     }
 
-    public int createOrder(int customerId){
+    public int createOrder(String name, int customer_id){
 
-        return 0;
+        HashMap<String, Object> orderInfo = new HashMap<String, Object>();
+        orderInfo.put("date_order", new Date().toString());
+        orderInfo.put("shop_id", 1);
+        orderInfo.put("picking_policy", "direct");
+        orderInfo.put("order_policy", "manual");
+        orderInfo.put("invoice_quantity", "order");
+        orderInfo.put("pricelist_id", 1);
+
+        orderInfo.put("partner_id", customer_id);
+        orderInfo.put("partner_shipping_id", customer_id);
+        orderInfo.put("partner_invoice_id", customer_id);
+        orderInfo.put("partner_order_id", customer_id);
+
+        Object id = create("sale.order", orderInfo);
+        return (Integer) id;
+    }
+
+    public int createLineOrder(int orderId, int quantity, int productId){
+
+        Object[] fields = new Object[2];
+        fields[0] = "name";
+        fields[1] = "lst_price";
+
+        HashMap<String, Object> product = read("product.product", productId, fields);
+
+        HashMap<String, Object> lineInfo = new HashMap<String, Object>();
+        lineInfo.put("order_id", orderId);
+        lineInfo.put("product_uos_qty",quantity);
+        lineInfo.put("product_uom", 1);
+        lineInfo.put("product_id", productId);
+        lineInfo.put("state", "confirmed");
+        lineInfo.put("name", product.get("name"));
+        lineInfo.put("price_unit", product.get("lst_price"));
+
+
+        Object id = create("sale.order.line", lineInfo);
+        return (Integer)id;
     }
 
     public HashMap<String,Object> readCountry(int id) {
@@ -91,21 +135,48 @@ public class ClientAPI {
         return read("res.country", id, null);
     }
 
+    public int createProduct(String name, String description, String[] imageArray, String os, String camera, String display, String weight){
 
-    public void createCustomer(String firstname, String lastname, String address, String city, String postalcode, String phone, String mobilePhone, String email, String province_id, String country_id) {
+        HashMap<String, Object> productInfo = new HashMap<String, Object>();
+        productInfo.put("name", name);
+        productInfo.put("type", "product");
+        productInfo.put("procure_method", "make_to_stock");
+        productInfo.put("supply_method", "buy");
+        productInfo.put("cost_method", "standard");
+        productInfo.put("categ_id", 1);
+        productInfo.put("uom_id", 1);
+        productInfo.put("uom_po_id", 1);
+        productInfo.put("valuation", "manual_periodic");
+        productInfo.put("description", description);
+        productInfo.put("x_image1", imageArray[0]);
+        productInfo.put("x_image2", imageArray[1]);
+        productInfo.put("x_image3", imageArray[2]);
+        productInfo.put("x_image4", imageArray[3]);
+        productInfo.put("x_image5", imageArray[4]);
+        productInfo.put("x_os", os);
+        productInfo.put("x_camera", camera);
+        productInfo.put("x_display", display);
+        productInfo.put("weight", weight);
+
+        Object id = create("product.product", productInfo);
+        return (Integer) id;
+    }
+
+
+    public void createCustomer(String firstName, String lastName, String address, String city, String postalCode, String phone, String mobilePhone, String email, String province_id, String country_id) {
 
         HashMap<String, Object> partnerInfo = new HashMap<String, Object>();
-        partnerInfo.put("name", firstname + " " + lastname);
+        partnerInfo.put("name", firstName + " " + lastName);
         partnerInfo.put("lang", "fr_FR");
         partnerInfo.put("customer", true);
 
         Object id = create("res.partner", partnerInfo);
 
         HashMap<String, Object> addressInfo = new HashMap<String, Object>();
-        partnerInfo.put("name", firstname + " " + lastname);
+        partnerInfo.put("name", firstName + " " + lastName);
         addressInfo.put("partner_id", id);
         addressInfo.put("street", address);
-        addressInfo.put("zip", postalcode);
+        addressInfo.put("zip", postalCode);
         addressInfo.put("city", city);
         addressInfo.put("phone", phone);
         addressInfo.put("mobile", mobilePhone);
@@ -164,6 +235,37 @@ public class ClientAPI {
 
             Object id = xmlrpcLogin.execute("execute", create);
             return id;
+        }
+        catch (XmlRpcException e) {
+
+            //logger.warn("XmlException Error while logging to OpenERP: ",e);
+            System.out.println(e);
+        }
+        catch (Exception e){
+
+            //logger.warn("Error while logging to OpenERP: ",e);
+            System.out.println(e);
+        }
+        return null;
+
+    }
+
+    private Object write(String table, int id, HashMap<String, Object> info) {
+
+        XmlRpcClient xmlrpcLogin = getXmlrpcLogin();
+
+        try {
+            Object write[]=new Object[7];
+            write[0] = database;
+            write[1] = userId;
+            write[2] = password;
+            write[3] = table;
+            write[4] = "write";
+            write[5] = id;
+            write[6] = info;
+
+            HashMap<String, Object> result = (HashMap<String, Object>)xmlrpcLogin.execute("execute", write);
+            return result;
         }
         catch (XmlRpcException e) {
 
