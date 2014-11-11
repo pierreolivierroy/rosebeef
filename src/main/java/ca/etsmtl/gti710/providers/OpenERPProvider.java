@@ -84,11 +84,6 @@ public class OpenERPProvider implements IProvider {
         Order order = new Order();
         order.setOrder_id((Integer)orderInfo.get("id"));
         order.setOrder_date(orderInfo.get("date_order").toString());
-        System.out.println(orderInfo.get("amount_untaxed"));
-        order.setAmount_no_taxes((Double) orderInfo.get("amount_untaxed"));
-        order.setAmount_taxes((Double) orderInfo.get("amount_tax"));
-        order.setAmount_total((Double)orderInfo.get("amount_total"));
-        order.setState((String)orderInfo.get("state"));
 
         if (!orderInfo.get("amount_untaxed").toString().equals("false")) {
             order.setAmount_no_taxes((Double) orderInfo.get("amount_untaxed"));
