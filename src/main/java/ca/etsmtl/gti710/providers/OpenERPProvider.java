@@ -136,7 +136,7 @@ public class OpenERPProvider implements IProvider {
 
     @Override
     public Order addLineOrder(int orderId, int productId, int quantity) {
-        client.createLineOrder(orderId, productId, quantity);
+        client.createLineOrder(orderId, quantity , productId);
         return getOrder(orderId);
     }
 

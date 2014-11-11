@@ -110,18 +110,21 @@ public class ClientAPI {
 
     public int createLineOrder(int orderId, int quantity, int productId){
 
-//        HashMap<String, Object> product = readProduct(productId);
+        Object[] fields = new Object[2];
+        fields[0] = "name";
+        fields[1] = "lst_price";
+
+        HashMap<String, Object> product = read("product.product", productId, fields);
 
         HashMap<String, Object> lineInfo = new HashMap<String, Object>();
-        lineInfo.put("order_id", 5);
-//        lineInfo.put("product_uom_qty", 1);
-        lineInfo.put("product_uos_qty",1);
+        lineInfo.put("order_id", orderId);
+        lineInfo.put("product_uos_qty",quantity);
         lineInfo.put("product_uom", 1);
-        lineInfo.put("product_id", 7);
+        lineInfo.put("product_id", productId);
         lineInfo.put("state", "confirmed");
-        lineInfo.put("name", "Test");
-        lineInfo.put("price_unit", 10);
-//        lineInfo.put("order_partner_id", 10);
+        lineInfo.put("name", product.get("name"));
+        lineInfo.put("price_unit", product.get("lst_price"));
+
 
         Object id = create("sale.order.line", lineInfo);
         return (Integer)id;
