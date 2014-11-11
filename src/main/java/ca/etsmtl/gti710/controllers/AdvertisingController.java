@@ -8,6 +8,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONObject;
 import org.json.XML;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,44 +25,19 @@ import java.util.Map;
 @RequestMapping("/advertising")
 public class AdvertisingController {
 
-    /*
-    * Your AWS Access Key ID, as taken from the AWS Your Account page.
-    */
-    private static final String AWS_ACCESS_KEY_ID = "AKIAILRWM4275XJBHDFQ";
+    @Value("$AWS_ACCESS_KEY_ID")
+    private static final String AWS_ACCESS_KEY_ID;
 
-    /*
-     * Your AWS Secret Key corresponding to the above ID, as taken from the AWS
-     * Your Account page.
-     */
     private static final String AWS_SECRET_KEY = "5NnKyCmU1QidSwQ5t9c/Wduoe4jg9ldFnjiq0Tof";
 
-    /*
-     * Use one of the following end-points, according to the region you are
-     * interested in:
-     *
-     *      US: ecs.amazonaws.com
-     *      CA: ecs.amazonaws.ca
-     *      UK: ecs.amazonaws.co.uk
-     *      DE: ecs.amazonaws.de
-     *      FR: ecs.amazonaws.fr
-     *      JP: ecs.amazonaws.jp
-     *
-     */
     private static final String ENDPOINT = "ecs.amazonaws.ca";
 
-    /*
-     * The Item ID to lookup. The value below was selected for the US locale.
-     * You can choose a different value if this value does not work in the
-     * locale of your choice.
-     */
-    private static final String ITEM_ID = "0545010225";
+    private static final String ASSOCIATE_TAG = "pho0c88-20";
 
-    /*
-             * Set up the signed requests helper
-             */
+
     private SignedRequestsHelper helper;
 
-    @RequestMapping("/")
+    @RequestMapping("/accessories")
     public String ads() {
 
         String requestUrl;
@@ -78,8 +54,11 @@ public class AdvertisingController {
 
         Map<String, String> params = new HashMap<String, String>();
         params.put("Service", "AWSECommerceService");
-        params.put("Operation", "SimilarityLookup");
-        params.put("ItemId", "B00004GJVO");
+        params.put("Operation", "ItemSearch");
+        params.put("Keywords", "iPhone 6");
+        params.put("SearchIndex", "Electronics");
+        params.put("AssociateTag", ASSOCIATE_TAG);
+        params.put("ResponseGroup", "Accessories");
 
         requestUrl = helper.sign(params);
 
@@ -89,8 +68,6 @@ public class AdvertisingController {
 
         try {
             HttpResponse response = httpClient.execute(httpGet);
-//            StatusLine statusLine = response.getStatusLine();
-
             HttpEntity entity = response.getEntity();
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             entity.writeTo(out);

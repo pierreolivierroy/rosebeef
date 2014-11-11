@@ -145,7 +145,7 @@ public class SignedRequestsHelper {
     /**
      * This method signs requests in query-string form. It returns a URL that
      * should be used to fetch the response. The URL returned should not be
-     * modified in any way, doing so will invalidate the signature and Amazon
+     * modified in any way, doing so will invalidate the signature and Amazon¡
      * will reject the request.
      */
     public String sign(String queryString) {
