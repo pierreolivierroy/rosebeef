@@ -33,11 +33,39 @@ public class AdvertisingController {
 
     private static final String ASSOCIATE_TAG = "pho0c88-20";
 
-
     private SignedRequestsHelper helper;
 
-    @RequestMapping("/accessories")
-    public String accessories() {
+    @RequestMapping("/accessories/{keyword}")
+    public String accessories(@PathVariable("keyword") String _keyword) {
+
+        String requestUrl;
+        String keyword = _keyword.replace("-", " ");
+
+        try {
+            helper = SignedRequestsHelper.getInstance(ENDPOINT, AWS_ACCESS_KEY_ID, AWS_SECRET_KEY);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (InvalidKeyException e) {
+            e.printStackTrace();
+        }
+
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("Service", "AWSECommerceService");
+        params.put("Operation", "ItemSearch");
+        params.put("Keywords", keyword);
+        params.put("SearchIndex", "Electronics");
+        params.put("AssociateTag", ASSOCIATE_TAG);
+        params.put("ResponseGroup", "Accessories");
+
+        requestUrl = helper.sign(params);
+
+        return httpGET(requestUrl);
+    }
+
+    @RequestMapping("/lookup/{asin}")
+    public String accessory(@PathVariable("asin") String _asin) {
 
         String requestUrl;
 
@@ -53,16 +81,20 @@ public class AdvertisingController {
 
         Map<String, String> params = new HashMap<String, String>();
         params.put("Service", "AWSECommerceService");
-        params.put("Operation", "ItemSearch");
-        params.put("Keywords", "iPhone 6");
-        params.put("SearchIndex", "Electronics");
+        params.put("Operation", "ItemLookup");
+        params.put("ItemId", _asin);
         params.put("AssociateTag", ASSOCIATE_TAG);
-        params.put("ResponseGroup", "Accessories");
+        params.put("ResponseGroup", "Small, Images");
 
         requestUrl = helper.sign(params);
 
+        return httpGET(requestUrl);
+    }
+
+    private String httpGET(String req) {
+
         HttpClient httpClient = new DefaultHttpClient();
-        HttpGet httpGet = new HttpGet(requestUrl);
+        HttpGet httpGet = new HttpGet(req);
         String xmlResponse = "";
 
         try {
@@ -78,15 +110,8 @@ public class AdvertisingController {
             e.printStackTrace();
         }
 
-        XML xmlHelper = new XML();
-        final JSONObject jsonObject = xmlHelper.toJSONObject(xmlResponse);
+        final JSONObject jsonObject = XML.toJSONObject(xmlResponse);
 
         return jsonObject.toString();
-    }
-
-    @RequestMapping("/accessories/{asin}")
-    public String accessory(@PathVariable("asin") String asin) {
-
-        return "";
     }
 }
