@@ -8,7 +8,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONObject;
 import org.json.XML;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,8 +25,7 @@ import java.util.Map;
 @RequestMapping("/advertising")
 public class AdvertisingController {
 
-    @Value("$AWS_ACCESS_KEY_ID")
-    private static final String AWS_ACCESS_KEY_ID;
+    private String AWS_ACCESS_KEY_ID = "AKIAILRWM4275XJBHDFQ";
 
     private static final String AWS_SECRET_KEY = "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";
 
@@ -38,7 +37,7 @@ public class AdvertisingController {
     private SignedRequestsHelper helper;
 
     @RequestMapping("/accessories")
-    public String ads() {
+    public String accessories() {
 
         String requestUrl;
 
@@ -83,5 +82,11 @@ public class AdvertisingController {
         final JSONObject jsonObject = xmlHelper.toJSONObject(xmlResponse);
 
         return jsonObject.toString();
+    }
+
+    @RequestMapping("/accessories/{asin}")
+    public String accessory(@PathVariable("asin") String asin) {
+
+        return "";
     }
 }
