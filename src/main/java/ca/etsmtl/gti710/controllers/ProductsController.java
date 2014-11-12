@@ -7,7 +7,10 @@ import ca.etsmtl.gti710.providers.IProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletResponse;
 
 @RestController
 public class ProductsController {
@@ -16,7 +19,8 @@ public class ProductsController {
 	IProvider provider;
 
 	@RequestMapping("/products")
-	public ArrayList<Product> products() {		
+	public @ResponseBody ArrayList<Product> products() {
+
 		return provider.getProducts();
 	}
 

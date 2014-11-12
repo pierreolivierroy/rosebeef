@@ -81,10 +81,25 @@ public class ClientAPI {
 
     public HashMap<String, Object> readOrder(int order_id) {
 
-        return read("sale.order", order_id, null);
+        Object[] fields = new Object[8];
+        fields[0] = "id";
+        fields[1] = "date_order";
+        fields[2] = "amount_untaxed";
+        fields[3] = "amount_tax";
+        fields[5] = "amount_total";
+        fields[6] = "state";
+        fields[7] = "order_line";
+
+        return read("sale.order", order_id, fields);
     }
 
     public HashMap<String, Object> readLineOrder(Integer lineOrderId) {
+
+        Object[] fields = new Object[4];
+        fields[0] = "name";
+        fields[1] = "product_uom_qty";
+        fields[2] = "price_unit";
+        fields[3] = "price_subtotal";
 
         return read("sale.order.line", lineOrderId, null);
     }
@@ -132,6 +147,10 @@ public class ClientAPI {
 
     public HashMap<String,Object> readCountry(int id) {
 
+        Object[] fields = new Object[3];
+        fields[0] = "name";
+        fields[1] = "code";
+        fields[2] = "id";
         return read("res.country", id, null);
     }
 
