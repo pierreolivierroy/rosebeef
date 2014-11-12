@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
+ 
+    <bean id="client" class="ca.etsmtl.gti710.openErp.ClientAPI">
+        <property name="host" value="gti710-20143-07.logti.etsmtl.ca" />
+        <property name="port" value="8069" />
+        <property name="login" value="admin" />
+        <property name="password" value="jaimeleschats" />
+        <property name="database" value="gti710_demo" />
+    </bean>
+
+</beans>
