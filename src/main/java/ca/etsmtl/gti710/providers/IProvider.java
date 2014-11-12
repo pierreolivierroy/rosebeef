@@ -13,7 +13,7 @@ public interface IProvider {
 
 	public ArrayList<Order> getOrders();
 	public Order getOrder(int id);
-    public Order createOrder(int customerId);
+    public Order createOrder(Order order);
     public Order addLineOrder(int orderId, int productId, int quantity);
 
     public Country getCountry(int id);

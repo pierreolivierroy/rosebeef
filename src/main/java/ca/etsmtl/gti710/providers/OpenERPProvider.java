@@ -3,13 +3,10 @@ package ca.etsmtl.gti710.providers;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import ca.etsmtl.gti710.models.Country;
-import ca.etsmtl.gti710.models.SaleOrderLine;
+import ca.etsmtl.gti710.models.*;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import ca.etsmtl.gti710.models.Order;
-import ca.etsmtl.gti710.models.Product;
 import ca.etsmtl.gti710.openErp.ClientAPI;
 
 public class OpenERPProvider implements IProvider {
@@ -112,6 +109,11 @@ public class OpenERPProvider implements IProvider {
         }
 
         order.setSaleOrderLines(saleOrderLines);
+        Customer customer = new Customer();
+        Address adress = new Address();
+        adress.setCity("Montreal");
+        customer.setBilling_address(adress);
+        order.setCustomer(customer);
         return order;
     }
 
@@ -128,10 +130,10 @@ public class OpenERPProvider implements IProvider {
 	}
 
     @Override
-    public Order createOrder(int customerId) {
+    public Order createOrder(Order order) {
 
-        int orderId = client.createOrder("name", customerId);
-        return getOrder(orderId);
+//        int orderId = client.createOrder("name", customerId);
+        return order;
     }
 
     @Override

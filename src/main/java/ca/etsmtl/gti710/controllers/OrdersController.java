@@ -10,19 +10,19 @@ import ca.etsmtl.gti710.providers.IProvider;
 
 @RestController
 public class OrdersController {
-	
+
 	@Autowired
 	IProvider provider;
 
-	@RequestMapping("/orders")
-	public ArrayList<Order> orders() {		
+	@RequestMapping(value="/orders", method=RequestMethod.GET)
+	public ArrayList<Order> orders() {
 		return provider.getOrders();
 	}
 
-	@RequestMapping(value="/orders", method=RequestMethod.POST)
-	public Order createOrders(@RequestParam(value="customer_id", required=true) int custormer_id) {
+    @RequestMapping(value="/orders", method=RequestMethod.POST, headers = {"Content-type=application/json"})
+	public Order createOrders(@RequestBody Order order) {
 		try {
-            return provider.createOrder(custormer_id);
+            return provider.createOrder(order);
         } catch (Exception e) {
             return null;
         }
