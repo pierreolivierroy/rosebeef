@@ -2,10 +2,19 @@ package ca.etsmtl.gti710.models;
 
 public class SaleOrderLine {
 
+    private int id;
     private String name;
 	private Double quantity;
 	private double price;
 	private double subtotal;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;

@@ -110,9 +110,14 @@ public class OpenERPProvider implements IProvider {
 
         order.setSaleOrderLines(saleOrderLines);
         Customer customer = new Customer();
-        Address adress = new Address();
-        adress.setCity("Montreal");
-        customer.setBilling_address(adress);
+        customer.setCity("Montréal");
+        customer.setAddress("12 laval");
+        customer.setCardNumber("4555 5555 5555 4444");
+        customer.setExpireMonth("08");
+        customer.setExpireYear("2016");
+        customer.setFirstname("Extremement");
+        customer.setLastname("Michel");
+        customer.setZip("H0H0H0");
         order.setCustomer(customer);
         return order;
     }

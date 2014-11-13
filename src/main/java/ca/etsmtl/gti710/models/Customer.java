@@ -4,31 +4,76 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Customer {
-	private Address billing_address;
-	private Address order_address;
-	private Address shipping_address;
+	private String firstname;
+    private String lastname;
+    private String city;
+    private String address;
+    private String zip;
+    private String cardNumber;
+    private String expireMonth;
+    private String expireYear;
 
-    public Address getBilling_address() {
-        return billing_address;
+    public String getFirstname() {
+        return firstname;
     }
 
-    public void setBilling_address(Address billing_address) {
-        this.billing_address = billing_address;
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
     }
 
-    public Address getOrder_address() {
-        return order_address;
+    public String getLastname() {
+        return lastname;
     }
 
-    public void setOrder_address(Address order_address) {
-        this.order_address = order_address;
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
     }
 
-    public Address getShipping_address() {
-        return shipping_address;
+    public String getCity() {
+        return city;
     }
 
-    public void setShipping_address(Address shipping_address) {
-        this.shipping_address = shipping_address;
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getZip() {
+        return zip;
+    }
+
+    public void setZip(String zip) {
+        this.zip = zip;
+    }
+
+    public String getCardNumber() {
+        return cardNumber;
+    }
+
+    public void setCardNumber(String cardNumber) {
+        this.cardNumber = cardNumber;
+    }
+
+    public String getExpireMonth() {
+        return expireMonth;
+    }
+
+    public void setExpireMonth(String expireMonth) {
+        this.expireMonth = expireMonth;
+    }
+
+    public String getExpireYear() {
+        return expireYear;
+    }
+
+    public void setExpireYear(String expireYear) {
+        this.expireYear = expireYear;
     }
 }
