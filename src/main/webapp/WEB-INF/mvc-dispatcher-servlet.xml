@@ -10,14 +10,15 @@
         http://www.springframework.org/schema/mvc
         http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
 
+    <context:property-placeholder location="classpath:amazonApi.properties" />
+
     <context:component-scan base-package="ca.etsmtl.gti710"/>
  	
 	<mvc:resources mapping="/**" location="/public/" />
-    <!--<mvc:resources mapping="/images/**" location="/public/images" />-->
 	<mvc:view-controller path="/" view-name="index.html"/>
 	
  	<bean id="jsonMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter" />
-	<bean id="OpenERPProvider" class="ca.etsmtl.gti710.providers.OpenERPProvider" />
+	<bean id="openERPProvider" class="ca.etsmtl.gti710.providers.OpenERPProvider" />
 	
 	<mvc:annotation-driven />
 	

@@ -8,6 +8,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONObject;
 import org.json.XML;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,13 +26,17 @@ import java.util.Map;
 @RequestMapping("/advertising")
 public class AdvertisingController {
 
-    private String AWS_ACCESS_KEY_ID = "AKIAILRWM4275XJBHDFQ";
+    @Value( "${amazon.aws_access_key_id}" )
+    private String AWS_ACCESS_KEY_ID;
 
-    private static final String AWS_SECRET_KEY = "5NnKyCmU1QidSwQ5t9c/Wduoe4jg9ldFnjiq0Tof";
+    @Value( "${amazon.aws_secret_key}" )
+    private String AWS_SECRET_KEY;
 
-    private static final String ENDPOINT = "ecs.amazonaws.ca";
+    @Value( "${amazon.endpoint}" )
+    private String ENDPOINT;
 
-    private static final String ASSOCIATE_TAG = "pho0c88-20";
+    @Value( "${amazon.associate_tag}" )
+    private String ASSOCIATE_TAG;
 
     private SignedRequestsHelper helper;
 
