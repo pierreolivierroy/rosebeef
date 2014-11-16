@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Customer {
-	private String firstname;
+    private Integer id;
+    private String firstname;
     private String lastname;
     private String city;
     private String address;
@@ -14,6 +15,15 @@ public class Customer {
     private String expireYear;
     private String email;
     private String phone;
+
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getEmail() {
         return email;

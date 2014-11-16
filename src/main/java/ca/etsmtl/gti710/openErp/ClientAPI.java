@@ -81,7 +81,7 @@ public class ClientAPI {
 
     public HashMap<String, Object> readOrder(int order_id) {
 
-        Object[] fields = new Object[8];
+        Object[] fields = new Object[9];
         fields[0] = "id";
         fields[1] = "date_order";
         fields[2] = "amount_untaxed";
@@ -89,25 +89,42 @@ public class ClientAPI {
         fields[5] = "amount_total";
         fields[6] = "state";
         fields[7] = "order_line";
+        fields[8] = "partner_id";
 
         return read("sale.order", order_id, fields);
     }
 
     public HashMap<String, Object> readLineOrder(Integer lineOrderId) {
 
-        Object[] fields = new Object[4];
+        Object[] fields = new Object[5];
         fields[0] = "name";
         fields[1] = "product_uom_qty";
         fields[2] = "price_unit";
         fields[3] = "price_subtotal";
+        fields[4] = "id";
 
-        return read("sale.order.line", lineOrderId, null);
+        return read("sale.order.line", lineOrderId, fields);
     }
 
-    public int createOrder(String name, int customer_id){
+    public HashMap<String, Object> readCustomer(Integer customerId) {
+
+        Object[] fields = new Object[7];
+        fields[0] = "x_firstname";
+        fields[1] = "x_lastname";
+        fields[2] = "street";
+        fields[3] = "zip";
+        fields[4] = "city";
+        fields[5] = "phone";
+        fields[6] = "email";
+
+        return read("res.partner.address", customerId, fields);
+    }
+
+    public int createOrder(int customer_id){
 
         HashMap<String, Object> orderInfo = new HashMap<String, Object>();
         orderInfo.put("date_order", new Date().toString());
+        orderInfo.put("company_id", 1);
         orderInfo.put("shop_id", 1);
         orderInfo.put("picking_policy", "direct");
         orderInfo.put("order_policy", "manual");
@@ -151,7 +168,7 @@ public class ClientAPI {
         fields[0] = "name";
         fields[1] = "code";
         fields[2] = "id";
-        return read("res.country", id, null);
+        return read("res.country", id, fields);
     }
 
     public int createProduct(String name, String description, String[] imageArray, String os, String camera, String display, String weight){
@@ -182,7 +199,7 @@ public class ClientAPI {
     }
 
 
-    public void createCustomer(String firstName, String lastName, String address, String city, String postalCode, String phone, String mobilePhone, String email, String province_id, String country_id) {
+    public int createCustomer(String firstName, String lastName, String address, String city, String postalCode, String phone, String email, String province_id, String country_id) {
 
         HashMap<String, Object> partnerInfo = new HashMap<String, Object>();
         partnerInfo.put("name", firstName + " " + lastName);
@@ -192,18 +209,21 @@ public class ClientAPI {
         Object id = create("res.partner", partnerInfo);
 
         HashMap<String, Object> addressInfo = new HashMap<String, Object>();
-        partnerInfo.put("name", firstName + " " + lastName);
+        addressInfo.put("name", firstName + " " + lastName);
+        addressInfo.put("x_firstname", firstName);
+        addressInfo.put("x_lastname", lastName);
         addressInfo.put("partner_id", id);
+        addressInfo.put("type", "default");
         addressInfo.put("street", address);
         addressInfo.put("zip", postalCode);
         addressInfo.put("city", city);
         addressInfo.put("phone", phone);
-        addressInfo.put("mobile", mobilePhone);
         addressInfo.put("email", email);
         addressInfo.put("country_id", country_id);
         addressInfo.put("state_id", province_id);
 
-        create("res.partner.address", addressInfo);
+        Object customerId = create("res.partner.address", addressInfo);
+        return (Integer)customerId;
     }
 
     public Object[] getProductList() {
@@ -269,37 +289,6 @@ public class ClientAPI {
 
     }
 
-    private Object write(String table, int id, HashMap<String, Object> info) {
-
-        XmlRpcClient xmlrpcLogin = getXmlrpcLogin();
-
-        try {
-            Object write[]=new Object[7];
-            write[0] = database;
-            write[1] = userId;
-            write[2] = password;
-            write[3] = table;
-            write[4] = "write";
-            write[5] = id;
-            write[6] = info;
-
-            HashMap<String, Object> result = (HashMap<String, Object>)xmlrpcLogin.execute("execute", write);
-            return result;
-        }
-        catch (XmlRpcException e) {
-
-            //logger.warn("XmlException Error while logging to OpenERP: ",e);
-            System.out.println(e);
-        }
-        catch (Exception e){
-
-            //logger.warn("Error while logging to OpenERP: ",e);
-            System.out.println(e);
-        }
-        return null;
-
-    }
-
     private Object[] search(String table, Vector<Object> param) {
 
         XmlRpcClient xmlrpcLogin = getXmlrpcLogin();
@@ -342,8 +331,10 @@ public class ClientAPI {
             read[5] = id;
             read[6] = fields;
 
-            HashMap<String, Object> result = (HashMap<String, Object>)xmlrpcLogin.execute("execute", read);
-            return result;
+            Object result = xmlrpcLogin.execute("execute", read);
+            if (!result.toString().equals("false")) {
+                return (HashMap<String, Object>)result;
+            }
         }
         catch (XmlRpcException e) {
             //logger.warn("XmlException Error while logging to OpenERP: ",e);

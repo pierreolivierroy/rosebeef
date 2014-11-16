@@ -1,12 +1,16 @@
 package ca.etsmtl.gti710.controllers;
 
+import java.net.HttpURLConnection;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ca.etsmtl.gti710.exceptions.OrderNotFoundException;
 import ca.etsmtl.gti710.models.Order;
 import ca.etsmtl.gti710.providers.IProvider;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpStatusCodeException;
 
 @RestController
 public class OrdersController {
@@ -20,29 +24,26 @@ public class OrdersController {
 	}
 
     @RequestMapping(value="/orders", method=RequestMethod.POST, headers = {"Content-type=application/json"})
-	public Order createOrders(@RequestBody Order order) {
+	public int createOrders(@RequestBody Order order) {
 		try {
             return provider.createOrder(order);
         } catch (Exception e) {
-            return null;
+            throw new HttpClientErrorException(HttpStatus.NOT_MODIFIED);
         }
 	}
-
-    @RequestMapping(value="/orders/{order_id}/lineOrder", method=RequestMethod.POST)
-    public Order addLineOrder(@PathVariable("order_id") int order_id, @RequestParam(value="product_id", required=true) int product_id, @RequestParam(value="quantity", required=true) int quantity) {
-        try {
-            return provider.addLineOrder(order_id, product_id, quantity);
-        } catch (Exception e) {
-            return null;
-        }
-    }
 	
 	@RequestMapping("/orders/{order_id}")
 	public Order order(@PathVariable("order_id") int order_id) {
 		try {
-			return provider.getOrder(order_id);
+			Order order =  provider.getOrder(order_id);
+            if (order == null){
+                throw new HttpClientErrorException(HttpStatus.NOT_FOUND);
+            }
+            else{
+                return order;
+            }
 		} catch (NullPointerException e) {
-			throw new OrderNotFoundException();
+            throw new HttpClientErrorException(HttpStatus.CONFLICT);
 		}
 	}
 }
