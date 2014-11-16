@@ -75,7 +75,7 @@ public class Product {
         this.camera = camera;
     }
 
-    public String getDisplay(String x_display) {
+    public String getDisplay() {
         return display;
     }
 

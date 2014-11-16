@@ -88,7 +88,7 @@ public class OpenERPProvider implements IProvider {
         }
 
         if (!openERPProduct.get("x_display").toString().equals("false")) {
-            product.getDisplay(openERPProduct.get("x_display").toString());
+            product.setDisplay(openERPProduct.get("x_display").toString());
         }
 
         if (!openERPProduct.get("weight").toString().equals("false")) {
