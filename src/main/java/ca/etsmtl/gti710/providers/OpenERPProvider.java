@@ -68,8 +68,8 @@ public class OpenERPProvider implements IProvider {
         if (!openERPProduct.get("name").toString().equals("false")) {
             product.setName(openERPProduct.get("name").toString());
         }
-        if (!openERPProduct.get("lst_price").toString().equals("false")) {
-            product.setPrice((Double) openERPProduct.get("lst_price"));
+        if (!openERPProduct.get("list_price").toString().equals("false")) {
+            product.setPrice((Double) openERPProduct.get("list_price"));
         }
 	    if (!openERPProduct.get("description").toString().equals("false")) {
 	    	product.setDescription(openERPProduct.get("description").toString());
@@ -91,8 +91,11 @@ public class OpenERPProvider implements IProvider {
             product.setDisplay(openERPProduct.get("x_display").toString());
         }
 
-        if (!openERPProduct.get("weight").toString().equals("false")) {
-            product.setWeight(openERPProduct.get("weight").toString());
+        if (!openERPProduct.get("x_weight").toString().equals("false")) {
+            product.setWeight(openERPProduct.get("x_weight").toString());
+        }
+        if (!openERPProduct.get("default_code").toString().equals("false")) {
+            product.setCode(openERPProduct.get("default_code").toString());
         }
 
         ArrayList imagesList = new ArrayList();

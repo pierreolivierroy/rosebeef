@@ -60,12 +60,12 @@ public class ClientAPI {
 
     public HashMap<String, Object> readProduct(int product_id) {
 
-        Object[] fields = new Object[15];
+        Object[] fields = new Object[16];
         fields[0] = "id";
         fields[1] = "name";
         fields[2] = "description";
         fields[3] = "default_code";
-        fields[5] = "lst_price";
+        fields[5] = "list_price";
         fields[6] = "x_image1";
         fields[7] = "x_image2";
         fields[8] = "x_image3";
@@ -74,7 +74,8 @@ public class ClientAPI {
         fields[11] = "x_os";
         fields[12] = "x_camera";
         fields[13] = "x_display";
-        fields[14] = "weight";
+        fields[14] = "x_weight";
+        fields[15] = "default_code";
 
         return read("product.product", product_id, fields);
     }
@@ -171,7 +172,7 @@ public class ClientAPI {
         return read("res.country", id, fields);
     }
 
-    public int createProduct(String name, String description, String[] imageArray, String os, String camera, String display, String weight){
+    public int createProduct(String name, String description, String[] imageArray, String os, String camera, String display, String weight, String code, Double price){
 
         HashMap<String, Object> productInfo = new HashMap<String, Object>();
         productInfo.put("name", name);
@@ -182,6 +183,7 @@ public class ClientAPI {
         productInfo.put("categ_id", 1);
         productInfo.put("uom_id", 1);
         productInfo.put("uom_po_id", 1);
+        productInfo.put("default_code", code);
         productInfo.put("valuation", "manual_periodic");
         productInfo.put("description", description);
         productInfo.put("x_image1", imageArray[0]);
@@ -192,7 +194,8 @@ public class ClientAPI {
         productInfo.put("x_os", os);
         productInfo.put("x_camera", camera);
         productInfo.put("x_display", display);
-        productInfo.put("weight", weight);
+        productInfo.put("x_weight", weight);
+        productInfo.put("list_price", price);
 
         Object id = create("product.product", productInfo);
         return (Integer) id;
@@ -203,7 +206,6 @@ public class ClientAPI {
 
         HashMap<String, Object> partnerInfo = new HashMap<String, Object>();
         partnerInfo.put("name", firstName + " " + lastName);
-        partnerInfo.put("lang", "fr_FR");
         partnerInfo.put("customer", true);
 
         Object id = create("res.partner", partnerInfo);

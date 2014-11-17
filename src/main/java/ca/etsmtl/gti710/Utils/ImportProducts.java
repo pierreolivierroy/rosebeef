@@ -58,8 +58,10 @@ public class ImportProducts {
                 final JSONObject jsonDisplay = (JSONObject) jsonObject.get("display");
                 final String display = jsonDisplay.get("screenSize").toString() + ", " + jsonDisplay.get("screenResolution").toString();
                 final String weight = ((JSONObject) jsonObject.get("sizeAndWeight")).get("weight").toString();
+                final Double price = ((Long)jsonObject.get("price")).doubleValue();
+                final String code = jsonObject.get("id").toString();
 
-                client.createProduct(name, description, imagesArray, os, camera, display, weight);
+                client.createProduct(name, description, imagesArray, os, camera, display, weight, code, price);
             }
         }
     }
