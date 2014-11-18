@@ -201,7 +201,7 @@ public class OpenERPProvider implements IProvider {
     public int createOrder(Order order) {
 
         Customer customer = order.getCustomer();
-        int customerId = client.createCustomer(customer.getFirstname(), customer.getLastname(), customer.getAddress(), customer.getCity(), customer.getZip(), customer.getPhone(), customer.getEmail(),"1","1");
+        int customerId = client.createCustomer(customer.getFirstname(), customer.getLastname(), customer.getAddress(), customer.getCity(), customer.getZip(), customer.getPhone(), customer.getEmail(),"52","36");
         int orderId = client.createOrder(customerId);
         ArrayList<SaleOrderLine> saleOrderLineArrayList = order.getSaleOrderLines();
         for (SaleOrderLine aSaleOrderLineArrayList : saleOrderLineArrayList) {

@@ -151,7 +151,7 @@ public class ClientAPI {
 
         HashMap<String, Object> lineInfo = new HashMap<String, Object>();
         lineInfo.put("order_id", orderId);
-        lineInfo.put("product_uos_qty",quantity);
+        lineInfo.put("product_uom_qty", quantity);
         lineInfo.put("product_uom", 1);
         lineInfo.put("product_id", productId);
         lineInfo.put("state", "confirmed");
