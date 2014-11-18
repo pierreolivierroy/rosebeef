@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class Product {
 	
 	private int id;
+    private double qty_available;
 	private String name;
 	private String description;
 	private double price;
@@ -97,5 +98,13 @@ public class Product {
 
     public void setImages(ArrayList images) {
         this.images = images;
+    }
+
+    public double getQty_available() {
+        return qty_available;
+    }
+
+    public void setQty_available(double qty_available) {
+        this.qty_available = qty_available;
     }
 }

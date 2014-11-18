@@ -60,7 +60,7 @@ public class ClientAPI {
 
     public HashMap<String, Object> readProduct(int product_id) {
 
-        Object[] fields = new Object[16];
+        Object[] fields = new Object[17];
         fields[0] = "id";
         fields[1] = "name";
         fields[2] = "description";
@@ -76,6 +76,7 @@ public class ClientAPI {
         fields[13] = "x_display";
         fields[14] = "x_weight";
         fields[15] = "default_code";
+        fields[16] = "qty_available";
 
         return read("product.product", product_id, fields);
     }

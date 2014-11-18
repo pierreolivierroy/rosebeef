@@ -75,6 +75,10 @@ public class OpenERPProvider implements IProvider {
 	    	product.setDescription(openERPProduct.get("description").toString());
 	    }
 
+        if (!openERPProduct.get("qty_available").toString().equals("false")) {
+            product.setQty_available((Double)openERPProduct.get("qty_available"));
+        }
+
 	    if (!openERPProduct.get("default_code").toString().equals("false")) {
 	    	product.setCode(openERPProduct.get("default_code").toString());
 	    }
