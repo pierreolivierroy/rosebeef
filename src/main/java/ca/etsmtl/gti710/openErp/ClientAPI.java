@@ -7,7 +7,6 @@ import org.apache.xmlrpc.XmlRpcException;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Vector;
@@ -85,7 +84,7 @@ public class ClientAPI {
 
         Object[] fields = new Object[9];
         fields[0] = "id";
-        fields[1] = "date_order";
+        fields[1] = "create_date";
         fields[2] = "amount_untaxed";
         fields[3] = "amount_tax";
         fields[5] = "amount_total";
@@ -125,7 +124,7 @@ public class ClientAPI {
     public int createOrder(int customer_id){
 
         HashMap<String, Object> orderInfo = new HashMap<String, Object>();
-        orderInfo.put("date_order", javax.xml.bind.DatatypeConverter.parseDateTime(new SimpleDateFormat().toString()));
+        orderInfo.put("date_order", new Date().toString());
         orderInfo.put("company_id", 1);
         orderInfo.put("shop_id", 1);
         orderInfo.put("picking_policy", "direct");
