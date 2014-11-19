@@ -210,6 +210,10 @@ public class OpenERPProvider implements IProvider {
         ArrayList<SaleOrderLine> saleOrderLineArrayList = order.getSaleOrderLines();
         for (SaleOrderLine aSaleOrderLineArrayList : saleOrderLineArrayList) {
 
+            Product product = getProduct(aSaleOrderLineArrayList.getId());
+            if (product.getQty_available() < aSaleOrderLineArrayList.getQuantity()) {
+                return 0;
+            }
             client.createLineOrder(orderId, aSaleOrderLineArrayList.getQuantity().intValue(), aSaleOrderLineArrayList.getId());
         }
         return orderId;
