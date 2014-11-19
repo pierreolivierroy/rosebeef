@@ -76,7 +76,7 @@ public class ClientAPI {
         fields[13] = "x_display";
         fields[14] = "x_weight";
         fields[15] = "default_code";
-        fields[16] = "qty_available";
+        fields[16] = "virtual_available";
 
         return read("product.product", product_id, fields);
     }
@@ -156,8 +156,10 @@ public class ClientAPI {
         lineInfo.put("product_uom", 1);
         lineInfo.put("product_id", productId);
         lineInfo.put("state", "confirmed");
+        lineInfo.put("invoiced", true);
         lineInfo.put("name", product.get("name"));
         lineInfo.put("price_unit", product.get("lst_price"));
+        lineInfo.put("type", "make_to_stock");
 
 
         Object id = create("sale.order.line", lineInfo);
@@ -289,7 +291,6 @@ public class ClientAPI {
             System.out.println(e);
         }
         return null;
-
     }
 
     private Object[] search(String table, Vector<Object> param) {
