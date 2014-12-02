@@ -150,7 +150,7 @@ public class ClientAPI {
 
         HashMap<String, Object> product = read("product.product", productId, fields);
 
-        Double unitPrice = (Double)product.get("lst_price") * 1.1475;
+        Double unitPrice = (Double)product.get("lst_price") * 1.14975;
         HashMap<String, Object> lineInfo = new HashMap<String, Object>();
         lineInfo.put("order_id", orderId);
         lineInfo.put("product_uom_qty", quantity);
