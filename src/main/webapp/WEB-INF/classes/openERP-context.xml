@@ -9,7 +9,7 @@
         <property name="port" value="8069" />
         <property name="login" value="admin" />
         <property name="password" value="jaimeleschats" />
-        <property name="database" value="gti710" />
+        <property name="database" value="gti710Final" />
     </bean>
 
 </beans>
