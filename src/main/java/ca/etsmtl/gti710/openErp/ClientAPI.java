@@ -150,6 +150,7 @@ public class ClientAPI {
 
         HashMap<String, Object> product = read("product.product", productId, fields);
 
+        Double unitPrice = (Double)product.get("lst_price") * 1.15;
         HashMap<String, Object> lineInfo = new HashMap<String, Object>();
         lineInfo.put("order_id", orderId);
         lineInfo.put("product_uom_qty", quantity);
@@ -158,7 +159,7 @@ public class ClientAPI {
         lineInfo.put("state", "confirmed");
         lineInfo.put("invoiced", true);
         lineInfo.put("name", product.get("name"));
-        lineInfo.put("price_unit", product.get("lst_price"));
+        lineInfo.put("price_unit", unitPrice);
         lineInfo.put("type", "make_to_stock");
 
 
@@ -229,6 +230,41 @@ public class ClientAPI {
 
         Object customerId = create("res.partner.address", addressInfo);
         return (Integer)customerId;
+    }
+
+    public int createShipping(int addressId, int orderId) {
+
+        HashMap<String, Object> moveInfo = new HashMap<String, Object>();
+        moveInfo.put("invoice_state", "none");
+        moveInfo.put("company_id", 1);
+        moveInfo.put("state", "done");
+        moveInfo.put("move_type", "direct");
+        moveInfo.put("type", "out");
+        moveInfo.put("stock_journal_id", 1);
+        moveInfo.put("sale_id", orderId);
+
+        moveInfo.put("address_id", addressId);
+        moveInfo.put("origin", Integer.toString(orderId));
+
+        Object idmove = create("stock.picking", moveInfo);
+        return (Integer) idmove;
+    }
+
+    public int createStockMove(int id, int qty, int pickingId){
+
+        HashMap<String, Object> stockInfo = new HashMap<String, Object>();
+        stockInfo.put("product_id", id);
+        stockInfo.put("product_qty", qty);
+        stockInfo.put("state", "done");
+        stockInfo.put("product_uom", 1);
+        stockInfo.put("location_id", 12);
+        stockInfo.put("location_dest_id", 11);
+        stockInfo.put("name", "test");
+        stockInfo.put("picking_id", pickingId);
+        stockInfo.put("address_id", 14);
+
+        Object idmove = create("stock.move", stockInfo);
+        return (Integer)idmove;
     }
 
     public Object[] getProductList() {
